@@ -19,6 +19,14 @@ export class UserService extends ResourceService<UserResponse> {
     );
   }
 
+  create(user: any): Observable<UserResponse> {
+    return this.post<UserResponse>('', user);
+  }
+
+  update(id: string, user: any): Observable<UserResponse> {
+    return this.put<UserResponse>(id, user);
+  }
+
   getUsers(query: UserQueryRequest): Observable<PaginatedResponse<UserResponse>> {
     let params = new HttpParams();
     if (query.role) params = params.set('role', query.role);
