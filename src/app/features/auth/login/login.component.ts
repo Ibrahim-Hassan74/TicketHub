@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../../core/services/account.service';
 import { LucideAngularModule } from 'lucide-angular';
@@ -10,7 +10,7 @@ import { UiFeedbackService } from '../../../core/services/ui-feedback.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, RouterLink],
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
@@ -36,7 +36,7 @@ export class LoginComponent {
     }
 
     this.isLoading.set(true);
-    this.errorMessage.set('');
+    // this.errorMessage.set('');
 
     const { email, password } = this.loginForm.getRawValue();
 
@@ -63,7 +63,7 @@ export class LoginComponent {
           message += '\n' + err.error.errors.join('\n');
         }
 
-        this.errorMessage.set(message);
+        // this.errorMessage.set(message);
         this.uiFeedbackService.error(message, 'Login Failed');
       }
     });

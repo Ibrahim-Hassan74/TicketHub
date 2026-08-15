@@ -1,4 +1,4 @@
-import { LucideAngularModule } from "lucide-angular";
+import { LucideAngularModule, Phone } from "lucide-angular";
 import {
   LayoutDashboard,
   Ticket,
@@ -58,5 +58,6 @@ export const lucideIconsConfig = LucideAngularModule.pick({
   Timer,
   Mail,
   Lock,
-  LoaderCircle
+  LoaderCircle,
+  Phone
 });
