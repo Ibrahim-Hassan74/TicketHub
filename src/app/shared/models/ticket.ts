@@ -41,3 +41,13 @@ export interface UpdateTicketPriorityRequest {
 export interface AssignTicketRequest {
   agentId: string;
 }
+
+export interface TicketQueryRequest {
+  status?: TicketStatus;
+  priority?: TicketPriority;
+  search?: string;
+  sortBy?: SortBy;
+  sortOrder?: SortOrder;
+  page?: number;
+  pageSize?: number;
+}

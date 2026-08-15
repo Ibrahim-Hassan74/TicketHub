@@ -1,4 +1,4 @@
-import { LucideAngularModule, Phone } from "lucide-angular";
+import { AlertTriangle, ArrowLeft, ArrowRight, ChevronUp, FileText, Info, Loader2, LucideAngularModule, MessageCircle, Phone, PlusCircle, Save, Send, SlidersHorizontal } from "lucide-angular";
 import {
   LayoutDashboard,
   Ticket,
@@ -27,7 +27,9 @@ import {
   Timer,
   Mail,
   Lock,
-  LoaderCircle
+  LoaderCircle,
+  Clock8,
+  Unlock
 } from 'lucide-angular';
 
 export const lucideIconsConfig = LucideAngularModule.pick({
@@ -59,5 +61,19 @@ export const lucideIconsConfig = LucideAngularModule.pick({
   Mail,
   Lock,
   LoaderCircle,
-  Phone
+  Phone,
+  Loader2,
+  ArrowLeft,
+  AlertTriangle,
+  Send,
+  Info,
+  FileText,
+  MessageCircle,
+  SlidersHorizontal,
+  Clock8,
+  PlusCircle,
+  Save,
+  ArrowRight,
+  Unlock,
+  ChevronUp
 });
