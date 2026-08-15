@@ -111,6 +111,18 @@ export abstract class ResourceService<TModel = unknown> {
         return this.http.put<R>(url, body, { headers, params });
     }
 
+    protected patch<R = TModel>(
+        path = '',
+        body: unknown = {},
+        options: RequestOptions = {},
+    ): Observable<R> {
+        const url = this.buildUrl(path);
+        const headers = this.buildHeaders(options.headers);
+        const params = this.buildParams(options.params);
+
+        return this.http.patch<R>(url, body, { headers, params });
+    }
+
     protected delete<R = TModel>(
         path = '',
         options: RequestOptions = {},
