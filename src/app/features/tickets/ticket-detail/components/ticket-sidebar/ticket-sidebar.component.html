@@ -1,0 +1,143 @@
+<!-- Details Card -->
+<div class="glass-card rounded-3xl p-6 sm:p-7 relative overflow-hidden">
+  <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+    <lucide-icon name="info" class="w-24 h-24"></lucide-icon>
+  </div>
+  
+  <h3 class="text-xs font-black uppercase tracking-widest text-gray-400 mb-6 flex items-center gap-2">
+    <lucide-icon name="file-text" class="w-4 h-4"></lucide-icon> Overview
+  </h3>
+  
+  <div class="space-y-5 relative z-10">
+    <div>
+      <span class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Customer</span>
+      <div class="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+        <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-[10px]">{{ ticket().customerName.charAt(0).toUpperCase() }}</div>
+        {{ ticket().customerName }}
+      </div>
+    </div>
+    
+    <div class="pt-4 border-t border-gray-100 dark:border-gray-800/50">
+      <span class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Assigned Agent</span>
+      @if (currentUser()?.role === 'Admin') {
+        <div class="relative">
+          <select 
+            class="premium-input text-sm py-2 appearance-none bg-no-repeat pr-10"
+            style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239CA3AF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-position: right 0.75rem top 50%; background-size: 0.65rem auto;"
+            [disabled]="isAssigning()"
+            (change)="onAssignAgent($event)">
+            <option value="">-- Unassigned --</option>
+            @for (agent of agents(); track agent.id) {
+              <option [value]="agent.id" [selected]="agent.id === ticket().assignedAgentId">
+                {{ agent.displayName }}
+              </option>
+            }
+          </select>
+          @if (isAssigning()) {
+            <lucide-icon name="loader-2" class="w-4 h-4 animate-spin absolute right-10 top-1/2 -translate-y-1/2 text-gray-400"></lucide-icon>
+          }
+        </div>
+      } @else {
+        <div class="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+          @if (ticket().assignedAgentId) {
+            <div class="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-[10px]">{{ ticket().assignedAgentName!.charAt(0).toUpperCase() }}</div>
+            {{ ticket().assignedAgentName }}
+          } @else {
+            <span class="px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-xs text-gray-500 font-medium">Unassigned</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="pt-4 border-t border-gray-100 dark:border-gray-800/50">
+      <span class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Created</span>
+      <div class="text-sm font-medium text-gray-900 dark:text-white">{{ ticket().createdAt | date:'medium' }}</div>
+    </div>
+    
+    @if (ticket().updatedAt) {
+      <div class="pt-4 border-t border-gray-100 dark:border-gray-800/50">
+        <span class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Last Updated</span>
+        <div class="text-sm font-medium text-gray-900 dark:text-white">{{ ticket().updatedAt | date:'medium' }}</div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Actions Card -->
+<div class="glass-card rounded-3xl p-6 sm:p-7 mt-6 relative overflow-hidden">
+  <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+    <lucide-icon name="settings" class="w-24 h-24"></lucide-icon>
+  </div>
+  
+  <h3 class="text-xs font-black uppercase tracking-widest text-gray-400 mb-6 flex items-center gap-2">
+    <lucide-icon name="sliders-horizontal" class="w-4 h-4"></lucide-icon> Manage
+  </h3>
+  
+  <div class="space-y-6 relative z-10">
+    <!-- Admin Priority Change -->
+    @if (currentUser()?.role === 'Admin') {
+      <div>
+        <label class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Priority Level</label>
+        <div class="relative">
+          <select 
+            class="premium-input text-sm py-2.5 appearance-none bg-no-repeat pr-10"
+            style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239CA3AF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-position: right 0.75rem top 50%; background-size: 0.65rem auto;"
+            [disabled]="isChangingPriority()"
+            [ngModel]="ticket().priority"
+            (ngModelChange)="onPriorityChange($event)">
+            @for (opt of priorityOptions(); track opt) {
+              <option [value]="opt">{{ opt }}</option>
+            }
+          </select>
+          @if (isChangingPriority()) {
+            <lucide-icon name="loader-2" class="w-4 h-4 animate-spin absolute right-10 top-1/2 -translate-y-1/2 text-gray-400"></lucide-icon>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Admin / Agent Status Change -->
+    @if (currentUser()?.role === 'Admin' || currentUser()?.role === 'SupportAgent') {
+      <div>
+        <label class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Ticket Status</label>
+        <div class="relative">
+          <select 
+            class="premium-input text-sm py-2.5 appearance-none bg-no-repeat pr-10"
+            style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239CA3AF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-position: right 0.75rem top 50%; background-size: 0.65rem auto;"
+            [disabled]="isChangingStatus()"
+            [ngModel]="ticket().status"
+            (ngModelChange)="onStatusChange($event)">
+            @for (opt of availableStatusOptions(); track opt) {
+              <option [value]="opt">{{ opt }}</option>
+            }
+          </select>
+          @if (isChangingStatus()) {
+            <lucide-icon name="loader-2" class="w-4 h-4 animate-spin absolute right-10 top-1/2 -translate-y-1/2 text-gray-400"></lucide-icon>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Customer Actions -->
+    @if (currentUser()?.role === 'Customer') {
+      <div class="pt-2">
+        @if (ticket().status !== 'Closed') {
+          <button 
+            (click)="closeTicketCustomer.emit()"
+            class="w-full btn bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:hover:bg-rose-900/40 border border-rose-200 dark:border-rose-800 rounded-xl px-4 py-2.5 font-bold shadow-sm transition-colors flex items-center justify-center gap-2">
+            <lucide-icon name="lock" class="w-4 h-4"></lucide-icon>
+            Close Ticket
+          </button>
+        } @else {
+          <button 
+            (click)="reopenTicketCustomer.emit()"
+            class="w-full btn bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-800 rounded-xl px-4 py-2.5 font-bold shadow-sm transition-colors flex items-center justify-center gap-2">
+            <lucide-icon name="unlock" class="w-4 h-4"></lucide-icon>
+            Reopen Ticket
+          </button>
+        }
+      </div>
+    }
+
+  </div>
+</div>

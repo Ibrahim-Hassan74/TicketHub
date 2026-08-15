@@ -1,0 +1,109 @@
+@if (!isLoading() && ticket()) {
+  <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-[1400px] mx-auto">
+    <!-- Top bar / Back -->
+    <div class="mb-6">
+      <button routerLink="/tickets" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 group">
+        <div class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mr-3 group-hover:-translate-x-1 transition-transform">
+          <lucide-icon name="arrow-left" class="w-4 h-4"></lucide-icon>
+        </div>
+        Back to Tickets
+      </button>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Left Column: Main content -->
+      <div class="flex-1 space-y-8 min-w-0">
+        
+        <!-- Ticket Header (Glass Card) -->
+        <app-ticket-header [ticket]="ticket()!"></app-ticket-header>
+
+        <!-- Interactive Section (Tabs + Content) -->
+        <div class="glass-card rounded-3xl flex flex-col min-h-[400px]">
+          <!-- Segmented Tab Header -->
+          <div class="p-2 border-b border-gray-100 dark:border-gray-800">
+            <div class="flex bg-gray-50/80 dark:bg-gray-900/50 p-1 rounded-xl">
+              <button 
+                (click)="setTab('comments')"
+                class="segmented-tab flex items-center justify-center gap-2"
+                [ngClass]="activeTab() === 'comments' ? 'segmented-tab-active' : 'segmented-tab-inactive'">
+                <lucide-icon name="message-square" class="w-4 h-4"></lucide-icon> 
+                <span class="hidden sm:inline">Comments</span>
+              </button>
+              <button 
+                (click)="setTab('timeline')"
+                class="segmented-tab flex items-center justify-center gap-2"
+                [ngClass]="activeTab() === 'timeline' ? 'segmented-tab-active' : 'segmented-tab-inactive'">
+                <lucide-icon name="activity" class="w-4 h-4"></lucide-icon> 
+                <span class="hidden sm:inline">Timeline</span>
+              </button>
+              @if (canViewTimeEntries()) {
+                <button 
+                  (click)="setTab('time')"
+                  class="segmented-tab flex items-center justify-center gap-2"
+                  [ngClass]="activeTab() === 'time' ? 'segmented-tab-active' : 'segmented-tab-inactive'">
+                  <lucide-icon name="clock-8" class="w-4 h-4"></lucide-icon> 
+                  <span class="hidden sm:inline">Time Logs</span>
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Tab Body -->
+          <div class="p-6 sm:p-8 flex-1 flex flex-col bg-white/40 dark:bg-gray-800/20 rounded-b-3xl">
+            
+            <!-- Comments Tab -->
+            @if (activeTab() === 'comments') {
+              <app-ticket-comments 
+                [comments]="comments()"
+                [isSubmitting]="isSubmittingComment()"
+                (addComment)="submitComment($event)">
+              </app-ticket-comments>
+            }
+
+            <!-- Timeline Tab -->
+            @if (activeTab() === 'timeline') {
+              <app-ticket-timeline [activities]="activities()"></app-ticket-timeline>
+            }
+
+            <!-- Time Entries Tab -->
+            @if (activeTab() === 'time' && canViewTimeEntries()) {
+              <app-ticket-time-logs
+                #timeLogsComp
+                [timeEntries]="timeEntries()"
+                [totalTimeMinutes]="totalTimeMinutes()"
+                [canLogTime]="canLogTime()"
+                [isSubmitting]="isSubmittingTime()"
+                (addTimeEntry)="submitTimeEntry($event); timeLogsComp.resetForm()">
+              </app-ticket-time-logs>
+            }
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Sidebar info/actions -->
+      <div class="w-full lg:w-80 space-y-6 shrink-0">
+        <app-ticket-sidebar
+          [ticket]="ticket()!"
+          [currentUser]="currentUser()"
+          [agents]="agents()"
+          [availableStatusOptions]="availableStatusOptions()"
+          [priorityOptions]="priorityOptions"
+          [isChangingStatus]="isChangingStatus()"
+          [isChangingPriority]="isChangingPriority()"
+          [isAssigning]="isAssigning()"
+          (changeStatus)="changeStatus($event)"
+          (changePriority)="changePriority($event)"
+          (assignAgent)="assignAgent($event)"
+          (closeTicketCustomer)="closeTicketCustomer()"
+          (reopenTicketCustomer)="reopenTicketCustomer()">
+        </app-ticket-sidebar>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="p-12 text-center text-gray-400 dark:text-gray-500 w-full flex flex-col items-center justify-center min-h-[60vh] animate-pulse">
+    <lucide-icon name="loader-2" class="w-12 h-12 animate-spin text-blue-500 mb-6"></lucide-icon>
+    <p class="text-lg font-medium tracking-wide">Loading premium experience...</p>
+  </div>
+}

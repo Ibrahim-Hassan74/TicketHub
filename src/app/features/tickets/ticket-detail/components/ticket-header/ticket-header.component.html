@@ -1,0 +1,29 @@
+<div class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden group mb-4">
+  <!-- Decorative background glow -->
+  <div
+    class="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-colors duration-500 pointer-events-none">
+  </div>
+
+  <div class="relative z-10">
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight mb-4">
+      {{ ticket().title }}
+    </h1>
+    <div class="flex flex-wrap items-center gap-3">
+      <app-status-badge [status]="ticket().status"></app-status-badge>
+      <app-priority-badge [priority]="ticket().priority"></app-priority-badge>
+      <div class="h-4 w-px bg-gray-300 dark:bg-gray-700 hidden sm:block"></div>
+      <span class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+        <lucide-icon name="clock" class="w-4 h-4"></lucide-icon>
+        {{ ticket().createdAt | relativeTime }}
+      </span>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
+      <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Description</h3>
+      <div
+        class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 whitespace-pre-wrap text-[15px] leading-relaxed">
+        {{ ticket().description }}
+      </div>
+    </div>
+  </div>
+</div>

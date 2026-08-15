@@ -1,0 +1,68 @@
+<div class="animate-fade-in-up">
+  <!-- Total Time Card -->
+  <div class="mb-8 flex flex-wrap gap-4 justify-between items-center bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800/50 shadow-inner">
+    <div class="flex items-center gap-3 text-blue-900 dark:text-blue-300">
+      <div class="p-2 bg-blue-100 dark:bg-blue-800/50 rounded-lg">
+        <lucide-icon name="clock" class="w-5 h-5"></lucide-icon>
+      </div>
+      <span class="font-bold tracking-wide">Total Time Tracked</span>
+    </div>
+    <span class="text-2xl font-black text-blue-700 dark:text-blue-400">{{ totalTimeMinutes() | duration }}</span>
+  </div>
+
+  <div class="space-y-4 mb-10">
+    @for (te of timeEntries(); track te.id) {
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-4 bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 shrink-0">
+            {{ te.agentName.charAt(0) }}
+          </div>
+          <div>
+            <div class="font-bold text-gray-900 dark:text-gray-100 text-sm">{{ te.agentName }}</div>
+            <div class="text-gray-600 dark:text-gray-400 text-sm mt-0.5">{{ te.description }}</div>
+            <div class="text-[11px] font-medium text-gray-400 mt-1.5">{{ te.workDate | date:'medium' }}</div>
+          </div>
+        </div>
+        <div class="font-bold text-gray-900 dark:text-gray-100 shrink-0 bg-gray-50 dark:bg-gray-900 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-center">
+          {{ te.durationMinutes | duration }}
+        </div>
+      </div>
+    }
+    @if (timeEntries().length === 0) {
+      <div class="text-center py-8 text-gray-500 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-2xl">
+        No time logged yet.
+      </div>
+    }
+  </div>
+
+  <!-- Log Time Form -->
+  @if (canLogTime()) {
+    <form [formGroup]="timeForm" (ngSubmit)="submit()" class="bg-white/60 dark:bg-gray-900/40 p-6 rounded-3xl border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+      <h4 class="font-bold text-gray-900 dark:text-white mb-5 flex items-center gap-2">
+        <lucide-icon name="plus-circle" class="w-5 h-5 text-emerald-500"></lucide-icon> Log New Time
+      </h4>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-5 mb-5">
+        <div class="sm:col-span-1">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Minutes</label>
+          <input type="number" formControlName="durationMinutes" class="premium-input bg-white dark:bg-gray-900" placeholder="e.g. 45">
+        </div>
+        <div class="sm:col-span-3">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Work Description</label>
+          <input type="text" formControlName="description" class="premium-input bg-white dark:bg-gray-900" placeholder="Describe the work performed...">
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <button type="submit" [disabled]="timeForm.invalid || isSubmitting()" class="btn bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl px-6 py-2.5 disabled:opacity-50 font-semibold shadow-lg shadow-emerald-500/20 flex items-center gap-2 transition-all hover:-translate-y-0.5">
+          @if (isSubmitting()) {
+            <lucide-icon name="loader-2" class="w-4 h-4 animate-spin"></lucide-icon>
+          } @else {
+            <lucide-icon name="save" class="w-4 h-4"></lucide-icon>
+          }
+          Save Log
+        </button>
+      </div>
+    </form>
+  }
+</div>

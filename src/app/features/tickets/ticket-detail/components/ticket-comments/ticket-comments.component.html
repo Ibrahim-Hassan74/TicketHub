@@ -1,0 +1,72 @@
+<div class="flex flex-col h-full animate-fade-in-up">
+  <div class="space-y-6 flex-1 mb-8">
+    @for (comment of comments().slice(0, visibleCount()); track comment.id) {
+      <div class="flex gap-4 group">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold shrink-0 shadow-sm border border-blue-200 dark:border-blue-800">
+          {{ comment.userName.charAt(0).toUpperCase() }}
+        </div>
+        <div class="flex-1 max-w-[85%]">
+          <div class="flex items-center gap-2 mb-1.5 ml-1">
+            <span class="font-semibold text-sm text-gray-900 dark:text-white">{{ comment.userName }}</span>
+            <span class="text-[11px] font-medium text-gray-500 dark:text-gray-400">{{ comment.createdAt | relativeTime }}</span>
+          </div>
+          <div class="chat-bubble-received">
+            <p class="whitespace-pre-wrap text-[15px] leading-relaxed">{{ comment.content }}</p>
+          </div>
+        </div>
+      </div>
+    }
+    @if (comments().length === 0) {
+      <div class="text-center py-12 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
+        <lucide-icon name="message-circle" class="w-12 h-12 mb-3 opacity-50"></lucide-icon>
+        <p class="text-sm font-medium">No comments yet. Start the conversation!</p>
+      </div>
+    }
+
+    @if (comments().length > visibleCount() || visibleCount() > 5) {
+      <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+        @if (comments().length > visibleCount()) {
+        <button (click)="showMore()"
+          class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors flex items-center gap-1.5 px-4 py-2 bg-blue-50/50 dark:bg-blue-900/20 hover:bg-blue-50 dark:hover:bg-blue-900/40 rounded-lg">
+          <lucide-icon name="chevron-down" class="w-4 h-4"></lucide-icon>
+          Show more comments ({{ comments().length - visibleCount() }} left)
+        </button>
+        }
+
+        @if (visibleCount() > 5) {
+        <button (click)="showLess()"
+          class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors flex items-center gap-1.5 px-4 py-2 bg-gray-50/50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
+          <lucide-icon name="chevron-up" class="w-4 h-4"></lucide-icon>
+          Show less
+        </button>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Add Comment Form -->
+  <form [formGroup]="commentForm" (ngSubmit)="submit()" class="mt-auto relative">
+    <div class="absolute -top-4 left-0 w-full h-4 bg-gradient-to-t from-white dark:from-gray-800 to-transparent pointer-events-none"></div>
+    <div class="relative bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden focus-within:ring-2 focus-within:ring-blue-500/30 focus-within:border-blue-500 transition-all duration-300">
+      <label class="sr-only">Add comment</label>
+      <textarea 
+        formControlName="content"
+        rows="2" 
+        class="w-full bg-transparent border-0 py-4 px-4 text-gray-900 dark:text-gray-100 placeholder-gray-400 resize-y min-h-[80px] focus:ring-0" 
+        placeholder="Reply to this ticket..."></textarea>
+      <div class="bg-gray-50 dark:bg-gray-800/50 px-4 py-2 border-t border-gray-100 dark:border-gray-800 flex justify-end">
+        <button 
+          type="submit" 
+          [disabled]="commentForm.invalid || isSubmitting()"
+          class="btn bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white rounded-lg px-5 py-2 text-sm font-semibold flex items-center gap-2 transition-all transform hover:-translate-y-0.5">
+          @if (isSubmitting()) {
+            <lucide-icon name="loader-2" class="w-4 h-4 animate-spin"></lucide-icon>
+          } @else {
+            <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
+          }
+          Send
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

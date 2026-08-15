@@ -1,0 +1,51 @@
+<div class="animate-fade-in-up">
+  <div class="relative border-l-2 border-gray-200 dark:border-gray-700/60 ml-4 py-4 space-y-10">
+    @for (act of activities().slice(0, visibleCount()); track act.id) {
+      <div class="relative pl-8 group">
+        <!-- Glowing Dot -->
+        <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-gray-900 border-[3px] border-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)] group-hover:scale-125 transition-transform duration-300"></div>
+        
+        <div class="mb-1 text-sm font-bold text-gray-900 dark:text-white">
+          {{ act.userName }} 
+          <span class="font-medium text-gray-500 dark:text-gray-400 mx-1">{{ act.description }}</span>
+        </div>
+        <div class="text-xs font-medium text-gray-400 flex items-center gap-1.5">
+          <lucide-icon name="calendar" class="w-3 h-3"></lucide-icon>
+          {{ act.createdAt | date:'medium' }}
+        </div>
+        
+        @if (act.oldValue || act.newValue) {
+          <div class="mt-3 p-3 bg-gray-50/80 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-800 text-sm font-mono flex flex-wrap items-center gap-3">
+            <div class="px-2 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 rounded line-through opacity-80">{{ act.oldValue }}</div>
+            <lucide-icon name="arrow-right" class="w-4 h-4 text-gray-400"></lucide-icon> 
+            <div class="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded font-semibold">{{ act.newValue }}</div>
+          </div>
+        }
+      </div>
+    }
+    
+    @if (activities().length > visibleCount() || visibleCount() > 5) {
+      <div class="pl-8 pt-2 flex flex-wrap items-center gap-3">
+        @if (activities().length > visibleCount()) {
+        <button (click)="showMore()"
+          class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors flex items-center gap-1.5 px-4 py-2 bg-blue-50/50 dark:bg-blue-900/20 hover:bg-blue-50 dark:hover:bg-blue-900/40 rounded-lg">
+          <lucide-icon name="chevron-down" class="w-4 h-4"></lucide-icon>
+          Show more activities ({{ activities().length - visibleCount() }} left)
+        </button>
+        }
+
+        @if (visibleCount() > 5) {
+        <button (click)="showLess()"
+          class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors flex items-center gap-1.5 px-4 py-2 bg-gray-50/50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
+          <lucide-icon name="chevron-up" class="w-4 h-4"></lucide-icon>
+          Show less
+        </button>
+        }
+      </div>
+    }
+
+    @if (activities().length === 0) {
+      <div class="pl-8 text-sm text-gray-500">No timeline history recorded.</div>
+    }
+  </div>
+</div>
