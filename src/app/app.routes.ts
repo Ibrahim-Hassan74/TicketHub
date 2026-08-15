@@ -60,6 +60,22 @@ export const routes: Routes = [
         path: 'tickets/:id',
         loadComponent: () => import('./features/tickets/ticket-detail/ticket-detail.component').then(m => m.TicketDetailComponent),
         title: 'Ticket Details — TicketHub'
+      },
+      {
+        path: 'users',
+        canActivate: [roleGuard('Admin')],
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./features/users/user-list/user-list.component').then(m => m.UserListComponent),
+            title: 'Users — TicketHub'
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./features/users/user-create/user-create.component').then(m => m.UserCreateComponent),
+            title: 'Create User — TicketHub'
+          }
+        ]
       }
     ]
   },
