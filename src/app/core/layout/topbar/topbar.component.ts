@@ -30,13 +30,13 @@ export class TopbarComponent {
     return name.substring(0, 2).toUpperCase();
   });
 
-  roleBadgeClass = computed(() => {
+  roleIndicatorClass = computed(() => {
     const role = this.currentUser()?.role;
     switch (role) {
-      case 'Admin': return 'bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-800';
-      case 'SupportAgent': return 'bg-cyan-100 text-cyan-700 border-cyan-200 dark:bg-cyan-900/30 dark:text-cyan-400 dark:border-cyan-800';
-      case 'Customer': return 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800';
-      default: return 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700';
+      case 'Admin': return 'bg-indigo-500 dark:bg-indigo-400 shadow-[0_0_6px_rgba(99,102,241,0.5)]';
+      case 'SupportAgent': return 'bg-cyan-500 dark:bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.5)]';
+      case 'Customer': return 'bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.5)]';
+      default: return 'bg-slate-500 dark:bg-slate-400';
     }
   });
 

@@ -9,17 +9,20 @@
   </div>
 
   <div class="flex items-center relative">
-    <button (click)="toggleDropdown()" (blur)="closeDropdown()" class="flex items-center gap-3 focus:outline-none group rounded-md p-1 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-      <div class="hidden sm:flex flex-col items-end">
-        <span class="text-sm font-medium text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white">{{ currentUser()?.displayName }}</span>
-        <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded border mt-0.5" [ngClass]="roleBadgeClass()">
+    <button (click)="toggleDropdown()" (blur)="closeDropdown()" class="flex items-center gap-3 focus:outline-none group rounded-full py-1.5 px-1.5 pe-3 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+      <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold shadow-sm shadow-indigo-500/30 border border-white/20">
+        {{ userInitials() }}
+      </div>
+      <div class="hidden sm:flex flex-col items-start">
+        <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white leading-none tracking-tight">
+          {{ currentUser()?.displayName }}
+        </span>
+        <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5 uppercase tracking-wider">
+          <div class="w-1.5 h-1.5 rounded-full" [ngClass]="roleIndicatorClass()"></div>
           {{ currentUser()?.role }}
         </span>
       </div>
-      <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold shadow-sm">
-        {{ userInitials() }}
-      </div>
-      <lucide-icon name="chevron-down" class="w-4 h-4 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300"></lucide-icon>
+      <lucide-icon name="chevron-down" class="w-4 h-4 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 ms-1 transition-transform group-focus:-rotate-180"></lucide-icon>
     </button>
 
     @if (isDropdownOpen) {
