@@ -13,8 +13,12 @@ export class UserService extends ResourceService<UserResponse> {
     super('Users');
   }
 
-  getAgents(): Observable<AgentSummary[]> {
-    return this.get<PaginatedResponse<AgentSummary>>('agents').pipe(
+  getAgents(pageNumber = 1, pageSize = 1000): Observable<AgentSummary[]> {
+    const params = new HttpParams()
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString());
+
+    return this.get<PaginatedResponse<AgentSummary>>('agents', { params }).pipe(
       map(res => res.items)
     );
   }
