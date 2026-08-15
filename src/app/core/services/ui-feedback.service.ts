@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
   providedIn: 'root'
 })
 export class UiFeedbackService {
-  private isDark = false;
+  private isDark = true;
 
   constructor() {
   }
