@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { User } from '../../../../../shared/models/user';
@@ -12,4 +12,6 @@ import { LucideAngularModule } from 'lucide-angular';
 })
 export class TicketListHeaderComponent {
   currentUser = input.required<User | null>();
+  isLoading = input.required<boolean>();
+  refresh = output<void>();
 }
