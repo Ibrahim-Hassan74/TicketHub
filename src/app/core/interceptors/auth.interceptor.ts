@@ -23,6 +23,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         authReq = addToken(req, token);
     }
 
+    if (req.url.includes('generate-new-jwt-token') ||
+        req.url.includes('login') ||
+        req.url.includes('register') ||
+        req.url.includes('logout')) {
+        return next(authReq);
+    }
+
     return next(authReq).pipe(
         catchError((error) => {
             if (error instanceof HttpErrorResponse && error.status === 401) {
@@ -49,18 +56,18 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                                     refreshTokenSubject.next(response.token);
                                     return next(addToken(req, response.token));
                                 } else {
-                                    accountService.logout();
+                                    accountService.forceLogout();
                                     return throwError(() => error);
                                 }
                             }),
                             catchError((refreshErr) => {
                                 isRefreshing = false;
-                                accountService.logout();
+                                accountService.forceLogout();
                                 return throwError(() => refreshErr);
                             })
                         );
                     } else {
-                        accountService.logout();
+                        accountService.forceLogout();
                         return throwError(() => error);
                     }
                 }

@@ -1,5 +1,6 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, tap, of, catchError, throwError, firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 import { ResourceService } from './resource.service';
 import {
     AuthResponse,
@@ -18,6 +19,8 @@ export class AccountService extends ResourceService<User> {
 
     private currentUserSignal = signal<User | null>(null);
     public currentUser = computed(() => this.currentUserSignal());
+
+    private router = inject(Router);
 
     constructor() {
         super('Account');
@@ -75,9 +78,15 @@ export class AccountService extends ResourceService<User> {
         return this.http.post<void>(this.buildUrl('logout'), {}).pipe(
             catchError(() => of(void 0)),
             tap(() => {
-                this.clearSession();
+                this.forceLogout();
             })
         );
+    }
+
+    public forceLogout(): void {
+        this.clearSession();
+        const currentUrl = this.router.url;
+        this.router.navigate(['/auth/login'], { queryParams: { returnUrl: currentUrl } });
     }
 
 
