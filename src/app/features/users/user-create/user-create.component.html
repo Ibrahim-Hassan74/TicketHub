@@ -1,0 +1,106 @@
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in-up">
+  <!-- Header -->
+  <div class="mb-8">
+    <button routerLink="/users" class="group flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors mb-4">
+      <lucide-icon name="arrow-left" class="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1"></lucide-icon>
+      Back to Users
+    </button>
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-200/50 dark:border-indigo-800/50 shrink-0">
+        <lucide-icon name="user-plus" class="w-6 h-6"></lucide-icon>
+      </div>
+      <div>
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">Create User</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Add a new admin, agent, or customer to the system.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="glass-card rounded-2xl overflow-hidden relative z-10 p-6 md:p-8">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Display Name -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Display Name</label>
+          <input type="text" formControlName="displayName"
+            class="premium-input w-full"
+            [class.border-red-300]="isFieldInvalid('displayName')"
+            [class.dark:border-red-900]="isFieldInvalid('displayName')"
+            [class.focus:ring-red-500]="isFieldInvalid('displayName')"
+            placeholder="John Doe">
+          @if (isFieldInvalid('displayName')) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+              <lucide-icon name="alert-triangle" class="w-4 h-4"></lucide-icon>
+              Display name is required (max 100 characters).
+            </p>
+          }
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Email Address</label>
+          <input type="email" formControlName="email"
+            class="premium-input w-full"
+            [class.border-red-300]="isFieldInvalid('email')"
+            [class.dark:border-red-900]="isFieldInvalid('email')"
+            [class.focus:ring-red-500]="isFieldInvalid('email')"
+            placeholder="john@example.com">
+          @if (isFieldInvalid('email')) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+              <lucide-icon name="alert-triangle" class="w-4 h-4"></lucide-icon>
+              A valid email is required.
+            </p>
+          }
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Password</label>
+          <input type="password" formControlName="password"
+            class="premium-input w-full"
+            [class.border-red-300]="isFieldInvalid('password')"
+            [class.dark:border-red-900]="isFieldInvalid('password')"
+            [class.focus:ring-red-500]="isFieldInvalid('password')"
+            placeholder="••••••••">
+          @if (isFieldInvalid('password')) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
+              <lucide-icon name="alert-triangle" class="w-4 h-4"></lucide-icon>
+              Password is required (min 8 characters).
+            </p>
+          }
+        </div>
+
+        <!-- Role -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">Role</label>
+          <select formControlName="role"
+            class="premium-input w-full appearance-none bg-no-repeat"
+            style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239CA3AF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-position: right 1rem top 50%; background-size: 0.65rem auto;">
+            <option value="Admin">Admin</option>
+            <option value="SupportAgent">Support Agent</option>
+            <option value="Customer">Customer</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pt-6 mt-6 border-t border-gray-100 dark:border-gray-800/60 flex justify-end gap-3">
+        <button type="button" routerLink="/users"
+          class="btn bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl px-6 py-2.5 font-medium transition-colors">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="form.invalid || isSubmitting()"
+          class="btn bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl px-8 py-2.5 font-semibold shadow-lg shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2">
+          @if (isSubmitting()) {
+            <lucide-icon name="loader-2" class="w-4 h-4 animate-spin"></lucide-icon>
+            Creating...
+          } @else {
+            <lucide-icon name="user-plus" class="w-4 h-4"></lucide-icon>
+            Create User
+          }
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

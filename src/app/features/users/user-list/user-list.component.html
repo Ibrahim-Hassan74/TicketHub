@@ -1,0 +1,40 @@
+@if (!isInitialLoad()) {
+  <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto animate-fade-in-up">
+    <!-- Page header -->
+    <app-user-list-header 
+      [isLoading]="isLoading()"
+      (refresh)="loadUsers()">
+    </app-user-list-header>
+  
+    <!-- Filters -->
+    <app-user-list-filters 
+      [query]="query()"
+      [roleOptions]="roleOptions"
+      (searchChange)="onSearchChange($event)"
+      (filterChange)="onFilterChange($event.key, $event.value)"
+      (resetFilters)="resetFilters()">
+    </app-user-list-filters>
+  
+    <!-- Table -->
+    <app-user-list-table 
+      [users]="users()"
+      [isLoading]="isLoading()"
+      (userUpdated)="loadUsers()">
+    </app-user-list-table>
+  
+    <!-- Pagination -->
+    <app-user-list-pagination
+      [query]="query()"
+      [totalPages]="totalPages()"
+      [totalCount]="totalCount()"
+      [isLoading]="isLoading()"
+      (pageChange)="changePage($event)">
+    </app-user-list-pagination>
+  </div>
+  } @else {
+  <div
+    class="p-12 text-center text-gray-400 dark:text-gray-500 w-full flex flex-col items-center justify-center min-h-[60vh] animate-pulse">
+    <lucide-icon name="loader-2" class="w-12 h-12 animate-spin text-blue-500 mb-6"></lucide-icon>
+    <p class="text-lg font-medium tracking-wide">Loading premium experience...</p>
+  </div>
+  }

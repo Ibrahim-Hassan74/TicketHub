@@ -1,0 +1,47 @@
+@if (totalPages() > 1 || (totalCount() > 0)) {
+  <div class="mt-8 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10 px-2">
+    <div class="text-sm text-gray-500 dark:text-gray-400 font-medium bg-white/50 dark:bg-gray-800/50 backdrop-blur-md px-4 py-2 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700/50">
+      Showing <span class="font-bold text-gray-900 dark:text-white">{{ ((query().page || 1) - 1) * (query().pageSize || 10) + 1 }}</span> to 
+      <span class="font-bold text-gray-900 dark:text-white">{{ Math.min((query().page || 1) * (query().pageSize || 10), totalCount()) }}</span> of 
+      <span class="font-bold text-gray-900 dark:text-white">{{ totalCount() }}</span> users
+    </div>
+    
+    <div class="flex items-center gap-2 p-1.5 bg-white/50 dark:bg-gray-800/50 backdrop-blur-md rounded-xl shadow-sm border border-gray-100 dark:border-gray-700/50">
+      <button 
+        [disabled]="(query().page || 1) === 1 || isLoading()"
+        (click)="pageChange.emit((query().page || 1) - 1)"
+        class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+        <lucide-icon name="chevron-left" class="w-5 h-5"></lucide-icon>
+      </button>
+  
+      @for (page of getPageNumbers(); track $index) {
+        @if (page === -1) {
+          <span class="w-9 h-9 flex items-center justify-center text-gray-400 font-medium">...</span>
+        } @else {
+          <button 
+            [disabled]="isLoading()"
+            (click)="pageChange.emit(page)"
+            [class.bg-gradient-to-r]="page === (query().page || 1)"
+            [class.from-blue-600]="page === (query().page || 1)"
+            [class.to-indigo-600]="page === (query().page || 1)"
+            [class.text-white]="page === (query().page || 1)"
+            [class.shadow-md]="page === (query().page || 1)"
+            [class.text-gray-600]="page !== (query().page || 1)"
+            [class.dark:text-gray-300]="page !== (query().page || 1)"
+            [class.hover:bg-gray-100]="page !== (query().page || 1)"
+            [class.dark:hover:bg-gray-700]="page !== (query().page || 1)"
+            class="w-9 h-9 rounded-lg text-sm font-bold transition-all flex items-center justify-center disabled:opacity-50">
+            {{ page }}
+          </button>
+        }
+      }
+  
+      <button 
+        [disabled]="(query().page || 1) === totalPages() || isLoading()"
+        (click)="pageChange.emit((query().page || 1) + 1)"
+        class="w-9 h-9 flex items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+        <lucide-icon name="chevron-right" class="w-5 h-5"></lucide-icon>
+      </button>
+    </div>
+  </div>
+  }

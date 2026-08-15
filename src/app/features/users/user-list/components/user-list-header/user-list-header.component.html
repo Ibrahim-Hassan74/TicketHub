@@ -1,0 +1,19 @@
+<!-- Page header -->
+<div class="sm:flex sm:justify-between sm:items-center mb-8 relative z-10">
+  <div class="mb-4 sm:mb-0">
+    <h1 class="text-3xl md:text-4xl text-gray-900 dark:text-white font-extrabold tracking-tight">Users</h1>
+    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Manage all admin, agent, and customer accounts.</p>
+  </div>
+  <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-3">
+    <button (click)="refresh.emit()" [disabled]="isLoading()"
+      class="btn bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl px-4 py-2.5 flex items-center gap-2 transition-colors shadow-sm disabled:opacity-50">
+      <lucide-icon name="refresh-cw" class="w-4 h-4" [class.animate-spin]="isLoading()"></lucide-icon>
+      <span class="font-medium hidden sm:inline">Refresh</span>
+    </button>
+    <button routerLink="/users/new"
+      class="btn bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl px-5 py-2.5 flex items-center gap-2 shadow-lg shadow-blue-500/30 transition-all duration-300 transform hover:-translate-y-0.5">
+      <lucide-icon name="user-plus" class="w-4 h-4"></lucide-icon>
+      <span class="font-semibold">Add User</span>
+    </button>
+  </div>
+</div>
