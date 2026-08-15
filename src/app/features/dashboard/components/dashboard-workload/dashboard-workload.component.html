@@ -1,0 +1,45 @@
+<div class="glass-card rounded-2xl overflow-hidden flex flex-col h-[450px]">
+  <div class="p-6 border-b border-gray-100 dark:border-gray-800/60 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
+    <h2 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+      <lucide-icon name="users" class="w-5 h-5 text-indigo-500"></lucide-icon>
+      Agent Workload
+    </h2>
+  </div>
+  <div class="overflow-y-auto beautiful-scrollbar flex-1">
+    @if (workload().length > 0) {
+      <div class="divide-y divide-gray-100 dark:divide-gray-800/50">
+        @for (agent of workload(); track agent.agentId) {
+          <div class="p-5 hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-sm shadow-sm border border-indigo-200 dark:border-indigo-800">
+                  {{ agent.agentName.charAt(0).toUpperCase() }}
+                </div>
+                <span class="font-semibold text-gray-900 dark:text-white">{{ agent.agentName }}</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4 text-center text-sm">
+              <div class="bg-amber-50 dark:bg-amber-900/10 rounded-lg py-2 border border-amber-100 dark:border-amber-900/30">
+                <div class="font-bold text-amber-600 dark:text-amber-500">{{ agent.openTickets }}</div>
+                <div class="text-[10px] uppercase font-bold text-amber-500 dark:text-amber-600/80 mt-0.5 tracking-wider">Open</div>
+              </div>
+              <div class="bg-indigo-50 dark:bg-indigo-900/10 rounded-lg py-2 border border-indigo-100 dark:border-indigo-900/30">
+                <div class="font-bold text-indigo-600 dark:text-indigo-500">{{ agent.inProgressTickets }}</div>
+                <div class="text-[10px] uppercase font-bold text-indigo-500 dark:text-indigo-600/80 mt-0.5 tracking-wider">Active</div>
+              </div>
+              <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg py-2 border border-gray-100 dark:border-gray-700/50">
+                <div class="font-bold text-gray-700 dark:text-gray-300">{{ agent.totalTimeMinutes | duration }}</div>
+                <div class="text-[10px] uppercase font-bold text-gray-500 mt-0.5 tracking-wider">Logged</div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="h-full flex flex-col items-center justify-center text-gray-400 p-6 text-center">
+        <lucide-icon name="users" class="w-10 h-10 mb-3 opacity-30"></lucide-icon>
+        <p class="text-sm font-medium">No active agents</p>
+      </div>
+    }
+  </div>
+</div>
