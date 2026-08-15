@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { TicketService } from '../../../core/services/ticket.service';
@@ -30,6 +30,7 @@ export class TicketListComponent implements OnInit {
   private ticketService = inject(TicketService);
   private accountService = inject(AccountService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   currentUser = this.accountService.currentUser;
   
@@ -63,7 +64,24 @@ export class TicketListComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.loadTickets();
+    this.route.queryParams.subscribe(params => {
+      const q: TicketQueryRequest = {
+        page: params['page'] ? Number(params['page']) : 1,
+        pageSize: params['pageSize'] ? Number(params['pageSize']) : 10,
+        sortBy: (params['sortBy'] as SortBy) || 'CreatedAt',
+        sortOrder: (params['sortOrder'] as SortOrder) || 'Descending',
+        status: params['status'] as TicketStatus || undefined,
+        priority: params['priority'] as TicketPriority || undefined,
+        search: params['search'] || undefined,
+      };
+      
+      if (!q.status) delete q.status;
+      if (!q.priority) delete q.priority;
+      if (!q.search) delete q.search;
+
+      this.query.set(q);
+      this.loadTickets();
+    });
   }
 
   loadTickets() {
@@ -107,8 +125,35 @@ export class TicketListComponent implements OnInit {
   }
 
   private updateQuery(changes: Partial<TicketQueryRequest>) {
-    this.query.update(q => ({ ...q, ...changes }));
-    this.loadTickets();
+    const current = this.query();
+    const newParams = { ...current, ...changes };
+    
+    // Convert undefined to null so router removes the param from URL
+    const queryParams: any = {};
+    for (const key of Object.keys(newParams)) {
+      queryParams[key] = (newParams as any)[key] === undefined ? null : (newParams as any)[key];
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  resetFilters() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: null,
+        pageSize: null,
+        sortBy: null,
+        sortOrder: null,
+        status: null,
+        priority: null,
+        search: null
+      }
+    });
   }
 
   goToDetail(id: string) {

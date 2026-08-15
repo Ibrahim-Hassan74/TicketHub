@@ -1,7 +1,11 @@
 @if (!isInitialLoad()) {
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
   <!-- Page header -->
-  <app-ticket-list-header [currentUser]="currentUser()"></app-ticket-list-header>
+  <app-ticket-list-header 
+    [currentUser]="currentUser()"
+    [isLoading]="isLoading()"
+    (refresh)="loadTickets()">
+  </app-ticket-list-header>
 
   <!-- Filters -->
   <app-ticket-list-filters 
@@ -9,7 +13,8 @@
     [statusOptions]="statusOptions"
     [priorityOptions]="priorityOptions"
     (searchChange)="onSearchChange($event)"
-    (filterChange)="onFilterChange($event.key, $event.value)">
+    (filterChange)="onFilterChange($event.key, $event.value)"
+    (resetFilters)="resetFilters()">
   </app-ticket-list-filters>
 
   <!-- Table -->

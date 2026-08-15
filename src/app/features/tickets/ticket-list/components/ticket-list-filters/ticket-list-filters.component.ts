@@ -17,6 +17,7 @@ export class TicketListFiltersComponent {
 
   searchChange = output<string>();
   filterChange = output<{ key: 'status' | 'priority', value: any }>();
+  resetFilters = output<void>();
 
   onSearchChange(searchTerm: string) {
     this.searchChange.emit(searchTerm);
