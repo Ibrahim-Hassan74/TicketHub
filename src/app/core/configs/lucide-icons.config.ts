@@ -1,4 +1,4 @@
-import { AlertTriangle, Archive, ArrowLeft, ArrowRight, CheckCircle2, ChevronUp, CircleDot, FileText, Info, Loader2, LucideAngularModule, MessageCircle, Phone, PlusCircle, RefreshCw, RotateCcw, Save, Send, SlidersHorizontal, TrendingUp } from "lucide-angular";
+import { AlertTriangle, Archive, ArrowLeft, ArrowRight, BarChart2, Check, CheckCircle2, ChevronUp, CircleDot, Edit2, FileText, Info, Loader2, LucideAngularModule, MessageCircle, Phone, PlusCircle, RefreshCw, RotateCcw, Save, Send, SlidersHorizontal, TrendingUp, UserPlus } from "lucide-angular";
 import {
   LayoutDashboard,
   Ticket,
@@ -81,5 +81,9 @@ export const lucideIconsConfig = LucideAngularModule.pick({
   RefreshCw,
   CheckCircle2,
   Archive,
-  RotateCcw
+  RotateCcw,
+  UserPlus,
+  Edit2,
+  Check,
+  BarChart2
 });
