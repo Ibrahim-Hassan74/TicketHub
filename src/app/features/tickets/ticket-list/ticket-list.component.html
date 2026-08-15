@@ -1,0 +1,40 @@
+@if (!isInitialLoad()) {
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+  <!-- Page header -->
+  <app-ticket-list-header [currentUser]="currentUser()"></app-ticket-list-header>
+
+  <!-- Filters -->
+  <app-ticket-list-filters 
+    [query]="query()"
+    [statusOptions]="statusOptions"
+    [priorityOptions]="priorityOptions"
+    (searchChange)="onSearchChange($event)"
+    (filterChange)="onFilterChange($event.key, $event.value)">
+  </app-ticket-list-filters>
+
+  <!-- Table -->
+  <app-ticket-list-table 
+    [tickets]="tickets()"
+    [isLoading]="isLoading()"
+    [currentUser]="currentUser()"
+    [query]="query()"
+    (sort)="onSort($event)"
+    (rowClick)="goToDetail($event)">
+  </app-ticket-list-table>
+
+  <!-- Pagination -->
+  <app-ticket-list-pagination
+    [query]="query()"
+    [totalPages]="totalPages()"
+    [totalCount]="totalCount()"
+    [isLoading]="isLoading()"
+    (pageChange)="changePage($event)">
+  </app-ticket-list-pagination>
+</div>
+} @else {
+<div
+  class="p-12 text-center text-gray-400 dark:text-gray-500 w-full flex flex-col items-center justify-center min-h-[60vh] animate-pulse">
+  <lucide-icon name="loader-2" class="w-12 h-12 animate-spin text-blue-500 mb-6"></lucide-icon>
+  <p class="text-lg font-medium tracking-wide">Loading premium experience...</p>
+</div>
+}
