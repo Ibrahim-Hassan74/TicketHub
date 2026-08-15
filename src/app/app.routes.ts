@@ -3,6 +3,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { inject } from '@angular/core';
 import { AccountService } from './core/services/account.service';
+import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
   {
@@ -19,7 +20,20 @@ export const routes: Routes = [
   },
   {
     path: 'auth',
-    loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES)
+    children: [
+      {
+        path: 'login',
+        canActivate: [guestGuard],
+        loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent),
+        title: 'Login — TicketHub'
+      },
+      {
+        path: 'register',
+        canActivate: [guestGuard],
+        loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent),
+        title: 'Register — TicketHub'
+      }
+    ]
   },
   {
     path: '',
@@ -29,24 +43,23 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         canActivate: [roleGuard('Admin')],
-        loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
+        loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+        title: 'Dashboard — TicketHub'
       },
       {
         path: 'tickets',
-        loadChildren: () => import('./features/tickets/tickets.routes').then(m => m.TICKETS_ROUTES)
+        loadComponent: () => import('./features/tickets/ticket-list/ticket-list.component').then(m => m.TicketListComponent),
+        title: 'Tickets — TicketHub'
       },
       {
         path: 'tickets/new',
-        loadChildren: () => import('./features/tickets/ticket-create/ticket-create.routes').then(m => m.TICKET_CREATE_ROUTES)
+        loadComponent: () => import('./features/tickets/ticket-create/ticket-create.component').then(m => m.TicketCreateComponent),
+        title: 'New Ticket — TicketHub'
       },
       {
         path: 'tickets/:id',
-        loadChildren: () => import('./features/tickets/ticket-detail/ticket-detail.routes').then(m => m.TICKET_DETAIL_ROUTES)
-      },
-      {
-        path: 'users',
-        canActivate: [roleGuard('Admin')],
-        loadChildren: () => import('./features/users/users.routes').then(m => m.USERS_ROUTES)
+        loadComponent: () => import('./features/tickets/ticket-detail/ticket-detail.component').then(m => m.TicketDetailComponent),
+        title: 'Ticket Details — TicketHub'
       }
     ]
   },
