@@ -4,10 +4,11 @@ A highly responsive, modern Angular 19+ single-page application built to interfa
 
 ## Live Resources
 
-- **Live Demo**: `https://ticket-hub.web.app`
-- **Backend API**: `https://support-ticket.runasp.net/api/v1`
-- **Swagger / OpenAPI Documentation**: `https://support-ticket.runasp.net/swagger/index.html`
-- **GitHub Repository**: `https://github.com/Ibrahim-Hassan74/TicketHub`
+- **Live Demo**: [https://ticket--hub.web.app](https://ticket--hub.web.app)
+- **Backend API**: [https://support-ticket.runasp.net/api/v1](https://support-ticket.runasp.net/api/v1)
+- **Swagger / OpenAPI Documentation**: [Swagger Interface](https://support-ticket.runasp.net/swagger/index.html)
+- **Frontend GitHub Repository**: [Frontend Repository](https://github.com/Ibrahim-Hassan74/TicketHub)
+- **Backend GitHub Repository**: [Backend Repository](https://github.com/Ibrahim-Hassan74/SupportTicketManagement)
 
 ## Overview
 
